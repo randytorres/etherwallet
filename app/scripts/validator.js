@@ -11,7 +11,7 @@ validator.isChecksumAddress = function(address) {
     return ethFuncs.isChecksumAddress(address);
 }
 validator.isValidENSorEtherAddress = function(address) {
-    return (validator.isValidAddress(address) || validator.isValidENSAddress(address));
+    return (validator.isValidAddress(address) || validator.isValidENSorECNSAddress(address));
 }
 validator.isValidENSName = function(str) {
     try {
@@ -23,12 +23,13 @@ validator.isValidENSName = function(str) {
 validator.isValidTxHash = function(txHash) {
     return txHash.substring(0, 2) == "0x" && txHash.length == 66 && this.isValidHex(txHash);
 }
-validator.isValidENSAddress = function(address) {
+validator.isValidENSorECNSAddress = function(address) {
     address = ens.normalise(address);
     var tld = address.substr(address.lastIndexOf('.') + 1);
     var _ens = new ens();
     var validTLDs = {
         eth: true,
+        etc: true,
         test: true,
         reverse: true
     }

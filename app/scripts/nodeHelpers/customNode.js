@@ -106,7 +106,7 @@ customNode.prototype.getEthCall = function(txobj, callback) {
             });
         }, 500);
     }
-    ethCallArr.calls.push({ "id": parentObj.getRandomID(), "jsonrpc": "2.0", "method": "eth_call", "params": [{ to: txobj.to, data: txobj.data }, 'pending'] });
+    ethCallArr.calls.push({ "id": parentObj.getRandomID(), "jsonrpc": "2.0", "method": "eth_call", "params": [{ to: txobj.to, data: txobj.data }, 'pending'], chain: txobj.chain });
     ethCallArr.callbacks.push(callback);
 }
 customNode.prototype.getTraceCall = function(txobj, callback) {
@@ -119,7 +119,13 @@ customNode.prototype.getTraceCall = function(txobj, callback) {
     });
 }
 customNode.prototype.rawPost = function(data, callback) {
-    ajaxReq.http.post(this.SERVERURL, JSON.stringify(data), this.config).then(function(data) {
+    var _serverURL = this.SERVERURL
+    if (typeof data[0] !== 'undefined') {
+        if (typeof data[0].chain !== 'undefined') {
+            _serverURL = data[0].chain;
+        }
+    }
+    ajaxReq.http.post(_serverURL, JSON.stringify(data), this.config).then(function(data) {
         callback(data.data);
     }, function(data) {
         callback({ error: true, msg: "connection error", data: "" });

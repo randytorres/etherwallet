@@ -92,8 +92,22 @@ ens.getNameHash = function(name) {
 ens.getSubNodeHash = function(name) {
     return subnodehash(name);
 };
+
+ens.prototype.crossChainLookup = function(name) {
+    var _this = this;
+    if (name.indexOf('.eth') > -1) {
+        _this.setCurrentRegistry(ens.registry.ETH)
+        return nodes.nodeList.eth_infura.lib.SERVERURL;
+    } else if (name.indexOf('.etc') > -1) {
+        _this.setCurrentRegistry(ens.registry.ETC)
+        return nodes.nodeList.etc_epool.lib.SERVERURL;
+    }
+
+}
+
 ens.prototype.getOwnerResolverAddress = function(funcABI, to, name, callback) {
     var _this = this;
+    // var chain = _this.crossChainLookup(name);
     ajaxReq.getEthCall({ to: to, data: _this.getDataString(funcABI, [namehash(name)]) }, function(data) {
         if (data.error) callback(data);
         else {

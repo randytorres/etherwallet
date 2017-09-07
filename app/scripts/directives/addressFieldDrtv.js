@@ -37,7 +37,7 @@ var addressFieldDrtv = function($compile) {
                     if (!Validator.isChecksumAddress(scope.addressDrtv.ensAddressField)) {
                         scope.notifier.info(globalFuncs.errorMsgs[35]);
                     }
-                } else if (Validator.isValidENSAddress(scope.addressDrtv.ensAddressField)) {
+                } else if (Validator.isValidENSorECNSAddress(scope.addressDrtv.ensAddressField)) {
                     _ens.getAddress(scope.addressDrtv.ensAddressField, function(data) {
                         if (data.error) uiFuncs.notifier.danger(data.msg);
                         else if (data.data == '0x0000000000000000000000000000000000000000' || data.data == '0x') {
